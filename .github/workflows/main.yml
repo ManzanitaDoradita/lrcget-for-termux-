@@ -33,4 +33,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: lrcget-arm64-cli
-          path: src-tauri/target/aarch64-unknown-linux-gnu/release/lrcget
+          path: src-tauri/target/aarch64-unknown-linux-gnu/release/lrcget/lrcget
