@@ -1,4 +1,4 @@
-name: Build LRCGET ARM64
+name: Build LRCGET ARM64 CLI
 
 on:
   push:
@@ -6,31 +6,31 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-arm64:
+  build-arm64-cli:
     runs-on: ubuntu-latest
     steps:
+      # Clona el repo
       - uses: actions/checkout@v3
 
+      # Instala Rust
       - name: Install Rust
         run: |
           curl https://sh.rustup.rs -sSf | sh -s -- -y
           echo "$HOME/.cargo/bin" >> $GITHUB_PATH
 
-      - name: Install deps
-        run: |
-          sudo apt update
-          sudo apt install -y libgtk-3-dev libayatana-appindicator3-dev build-essential gcc-aarch64-linux-gnu
-
+      # Agrega target ARM64
       - name: Add ARM64 target
         run: rustup target add aarch64-unknown-linux-gnu
 
-      - name: Build LRCGET release
+      # Build headless (CLI only, sin GUI)
+      - name: Build LRCGET CLI
         run: |
           cd src-tauri
-          cargo build --release --target aarch64-unknown-linux-gnu
+          cargo build --release --target aarch64-unknown-linux-gnu --no-default-features
 
+      # Sube el binario
       - name: Upload binary
         uses: actions/upload-artifact@v4
         with:
-          name: lrcget-arm64
-          path: src-tauri/target/aarch64-unknown-linux-gnu/release/lrcget    
+          name: lrcget-arm64-cli
+          path: src-tauri/target/aarch64-unknown-linux-gnu/release/lrcget
